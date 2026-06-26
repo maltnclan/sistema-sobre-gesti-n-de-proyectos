@@ -1,0 +1,43 @@
+-- Crear la base de datos (opcional, por si no la has creado aún)
+CREATE DATABASE IF NOT EXISTS base_proyecto_1;
+USE base_proyecto_1;
+
+-- 1. Tabla: empleado
+CREATE TABLE empleado (
+    idEmpleado INT AUTO_INCREMENT PRIMARY KEY,
+    rut VARCHAR(50) UNIQUE NOT NULL,
+    nombre VARCHAR(100),
+    apellido VARCHAR(100),
+    direccion VARCHAR(255),
+    telefono VARCHAR(50),
+    correo VARCHAR(100),
+    fechaInicioContrato DATE,
+    salario DECIMAL(12, 2)
+);
+
+-- 2. Tabla: proyecto
+CREATE TABLE proyecto (
+    idProyecto INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(150),
+    descripcion TEXT,
+    fechaInicio DATE
+);
+
+-- 3. Tabla: proyecto_empleado (Tabla intermedia)
+-- Relaciona los empleados (mediante su RUT) con los proyectos
+CREATE TABLE proyecto_empleado (
+    rut_empleado VARCHAR(50) NOT NULL,
+    id_proyecto INT NOT NULL,
+    PRIMARY KEY (rut_empleado, id_proyecto),
+    FOREIGN KEY (rut_empleado) REFERENCES empleado(rut) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (id_proyecto) REFERENCES proyecto(idProyecto) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- 4. Tabla: usuarios
+CREATE TABLE usuarios (
+    idUsuario INT AUTO_INCREMENT PRIMARY KEY,
+    rut VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    perfil INT,
+    FOREIGN KEY (rut) REFERENCES empleado(rut) ON DELETE CASCADE ON UPDATE CASCADE
+);
